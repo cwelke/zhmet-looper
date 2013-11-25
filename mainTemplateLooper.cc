@@ -386,18 +386,6 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 	  	// if( ( basename == "zjets" && zmet.leptype() != 2 ) && zmet.ngentaus() == 2 ) continue;
 	  }
 
-	  // //dilep plots - VERY SLOW
-	  // if( !(zmet.dilmass()<81.0 || zmet.dilmass()>101.0) ){
-	  // 	if( !(zmet.nlep()  > 2) ){
-	  // 	  fillHist( "njets", "zdilep", zmet.njets(), weight );
-	  // 	}
-	  // }	  
-
-	  // fillHist( "mll", "dilep",  zmet.dilep().mass(), weight );
-	  // fillHist( "zpt", "dilep",  zmet.dilep().pt(), weight );
-	  // fillHist( "mjj", "dilep",  (zmet.jet1() + zmet.jet2()).mass(), weight );
-	  // fillHist( "ptjj", "dilep", (zmet.jet1() + zmet.jet2()).pt(), weight );
-
 	  if( zmet.pfTau_leadPtcandID() != (-1) ){                  continue;}//tau veto
 	  if( zmet.njets() < 2 ){                                   continue;}//jet selection 
 	  if( zmet.njets() > 3 ){                                   continue;}//jet selection 
@@ -428,85 +416,50 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 	  bool twojet = ( zmet.njets() == 2 );
 	  bool threejet = ( zmet.njets() == 3 );
 	  
-	  // // zDilep cuts - VERY SLOW
-	  // if( medzwindow ){ 
-	  // 	fillHist( "mjj",  "zdilep", mjj,  weight );
-	  // 	fillHist( "ptjj", "zdilep", ptjj, weight );
-	  // 	fillHist( "zpt",  "zdilep", zmet.dilep().pt(),  weight );
-	  // }
-
-	  if( medzwindow ){ // high mjj cut
-		fillHist( "nbtags", "dilep", zmet.nbcsvl(), weight );
-		for( size_t ind = 0; ind < csvvals.size(); ind++ ){	fillHist( Form("csv%i", (int)ind+1), "dilep", csvvals.at(ind), weight ); }
-	  }
-
-	  if( mjj150 && medzwindow ){ // high mjj cut
-		fillHist( "nbtags", "mjj150", zmet.nbcsvl(), weight );
-		for( size_t ind = 0; ind < csvvals.size(); ind++ ){	fillHist( Form("csv%i", (int)ind+1), "mjj150", csvvals.at(ind), weight ); }
-		// fillHist( "csv2", "mjj150", csvvals.at(1), weight );
-		// fillHist( "csv3", "mjj150", csvvals.at(2), weight );
-	  }
-
-	  // if( mjj150 ){
-	  // 	fillHist( "mll", "mjj150", zmet.dilep().mass(), weight );
-	  // }
-
-	  if( mjj150 && mt2j200 && medzwindow ){ // high mjj cut
-		for( size_t ind = 0; ind < csvvals.size(); ind++ ){	fillHist( Form("csv%i", (int)ind+1), "mt2j", csvvals.at(ind), weight ); }
-		fillHist( "nbtags", "mt2j", zmet.nbcsvl(), weight );
-	  }
-
-	  // if( mjj150 && mt2j200 && bveto ){ // 0 btags
-	  // 	fillHist( "mll", "mt2j", mll, weight );
-	  // }
-
-	  if( mjj150 && mt2j200 && medzwindow && bveto ){ // 0 btags
-		fillHist( "met", "mt2j", zmet.pfmet(), weight );
-	  }
 	  
-	  if( !realmetz || !ztodilep ){
-		if( mjj150 && mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "bveto1_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto1_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto1_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "bveto1_met120_mt2", mll, weight );
-		}
-		if( mjj100 && mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "bveto2_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto2_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto2_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "bveto2_met120_mt2", mll, weight );
-		}
-		if( mjj100 && !mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "bveto3_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto3_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto3_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "bveto3_met120_mt2", mll, weight );
-		}
-		if( mjj150 && !mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "bveto4_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto4_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "bveto4_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "bveto4_met120_mt2", mll, weight );
-		}
-	  }
+	  // if( !realmetz || !ztodilep ){
+	  // 	if( mjj150 && mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "bveto1_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto1_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto1_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "bveto1_met120_mt2", mll, weight );
+	  // 	}
+	  // 	if( mjj100 && mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "bveto2_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto2_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto2_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "bveto2_met120_mt2", mll, weight );
+	  // 	}
+	  // 	if( mjj100 && !mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "bveto3_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto3_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto3_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "bveto3_met120_mt2", mll, weight );
+	  // 	}
+	  // 	if( mjj150 && !mt2j200 && bveto && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "bveto4_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto4_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "bveto4_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "bveto4_met120_mt2", mll, weight );
+	  // 	}
+	  // }
 
-		if( mjj150 && mt2j200 && bveto ){ // 0 btags
-		  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto1", zmet.pfmet(), weight );
-		  if( zmet.leptype() == 2 ) fillHist( "met", "bveto1", zmet.pfmet(), weight );
-		}
-		if( mjj100 && mt2j200 && bveto ){ // 0 btags
-		  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto2", zmet.pfmet(), weight );
-		  if( zmet.leptype() == 2 ) fillHist( "met", "bveto2", zmet.pfmet(), weight );
-		}
-		if( mjj100 && !mt2j200 && bveto ){ // 0 btags
-		  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto3", zmet.pfmet(), weight );
-		  if( zmet.leptype() == 2 ) fillHist( "met", "bveto3", zmet.pfmet(), weight );
-		}
-		if( mjj150 && !mt2j200 && bveto ){ // 0 btags
-		  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto4", zmet.pfmet(), weight );
-		  if( zmet.leptype() == 2 ) fillHist( "met", "bveto4", zmet.pfmet(), weight );
-		}
+	  // 	if( mjj150 && mt2j200 && bveto ){ // 0 btags
+	  // 	  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto1", zmet.pfmet(), weight );
+	  // 	  if( zmet.leptype() == 2 ) fillHist( "met", "bveto1", zmet.pfmet(), weight );
+	  // 	}
+	  // 	if( mjj100 && mt2j200 && bveto ){ // 0 btags
+	  // 	  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto2", zmet.pfmet(), weight );
+	  // 	  if( zmet.leptype() == 2 ) fillHist( "met", "bveto2", zmet.pfmet(), weight );
+	  // 	}
+	  // 	if( mjj100 && !mt2j200 && bveto ){ // 0 btags
+	  // 	  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto3", zmet.pfmet(), weight );
+	  // 	  if( zmet.leptype() == 2 ) fillHist( "met", "bveto3", zmet.pfmet(), weight );
+	  // 	}
+	  // 	if( mjj150 && !mt2j200 && bveto ){ // 0 btags
+	  // 	  if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "bveto4", zmet.pfmet(), weight );
+	  // 	  if( zmet.leptype() == 2 ) fillHist( "met", "bveto4", zmet.pfmet(), weight );
+	  // 	}
 	  
 
 	  //btag stuff  	  
@@ -527,12 +480,12 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 	  // // 2btag cuts - VERY SLOW
 	  // fillHist( "mll",  "2b", mll,  weight );
 	  if( medzwindow ){ // high mjj cut
-	  	fillHist( "mbb",  "2b", mbb,  weight );
+	  	// fillHist( "mbb",  "2b", mbb,  weight );
 	  	fillHist( "mt2b", "2b", mT2b, weight );
-	  	fillHist( "ptbb", "2b", ptbb, weight );
-	  	fillHist( "mjj",  "2b", mjj,  weight );
-	  	fillHist( "ptjj", "2b", ptjj, weight );
-	  	fillHist( "zpt",  "2b", zmet.dilep().pt(),  weight );
+	  	// fillHist( "ptbb", "2b", ptbb, weight );
+	  	// fillHist( "mjj",  "2b", mjj,  weight );
+	  	// fillHist( "ptjj", "2b", ptjj, weight );
+	  	// fillHist( "zpt",  "2b", zmet.dilep().pt(),  weight );
 
 		if( basename == "ttbar" ){
 		  if( TString(currentFile->GetTitle()).Contains("mgdl_") ){
@@ -553,11 +506,6 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 			  genleps.push_back(zmet.genlep2());
 
 			  Float_t mT2bgen = getmt2bgen( genleps, bquarks, zmet.genmet(), zmet.genmetphi() , 0.0 );
-			  // MT2( zmet.genmet(), zmet.genmetphi(), zmet.genlep1() + zmet.genbquark1(), zmet.genlep2() + zmet.genbquark2(), 0.0, true );
-			  // 			  if ( MT2( zmet.genmet(), zmet.genmetphi(), zmet.genlep1() + zmet.genbquark2(), zmet.genlep2() + zmet.genbquark1(), 0.0, true ) < mT2bgen ){
-			  // 				mT2bgen = MT2( zmet.genmet(), zmet.genmetphi(), zmet.genlep1() + zmet.genbquark2(), zmet.genlep2() + zmet.genbquark1(), 0.0, true );
-			  // 			  }
-
 			  fillHist( "mt2bgen", "dilep", mT2bgen, weight );
 			  // fillHist( "mt2jgen", "dilep", zmet.mt2j(), weight );
 			  if( mbb100150 ){
@@ -570,137 +518,65 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 
 	  }
 
-	  if( medzwindow && mbb150 && mt2b200 ){
-		fillHist( "met", "sig", zmet.pfmet(), weight );
-	  }
-	  
-	  if( mt2b200 && twojet ) {
-		fillHist( "mll", "2jet", mll, weight );
-	  }
-	  if( mt2b200 && threejet ) {
-		fillHist( "mll", "3jet", mll, weight );
-	  }
-	  
-	  if( medzwindow && zmet.pfmet() > 80 ){
-		fillHist( "mbb", "met80", mbb, weight );
-	  }
-	  if( medzwindow && zmet.pfmet() > 100 ){
-		fillHist( "mbb", "met100", mbb, weight );
-	  }
-	  if( medzwindow && zmet.pfmet() > 120 ){
-		fillHist( "mbb", "met120", mbb, weight );
-	  }
-	  
-	
-	  
-	  // if( mbb150 ){
-	  // 	// fillHist( "mll", "dilep", mll, weight );
-	  // 	fillHist( "zpt", "dilep", zmet.dilep().pt(), weight );
+	     
+	  // if( mbb150 && mt2b200 ){ // 0 btags
+	  // 	if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag1", zmet.pfmet(), weight );
+	  // 	if( zmet.leptype() == 2 ) fillHist( "met", "2btag1", zmet.pfmet(), weight );
+	  // }
+	  // if( mbb100150 && mt2b200 ){ // 0 btags
+	  // 	if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag2", zmet.pfmet(), weight );
+	  // 	if( zmet.leptype() == 2 ) fillHist( "met", "2btag2", zmet.pfmet(), weight );
+	  // }
+	  // if( mbb100150 && !mt2b200 ){ // 0 btags
+	  // 	if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag3", zmet.pfmet(), weight );
+	  // 	if( zmet.leptype() == 2 ) fillHist( "met", "2btag3", zmet.pfmet(), weight );
+	  // }
+	  // if( mbb150 && !mt2b200 ){ // 0 btags
+	  // 	if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag4", zmet.pfmet(), weight );
+	  // 	if( zmet.leptype() == 2 ) fillHist( "met", "2btag4", zmet.pfmet(), weight );
 	  // }
 
-	  if( mbb150 && mt2b200 ) {
-		fillHist( "mll", "sig", mll, weight );
-		fillHist( "mt2", "sig", zmet.mt2(), weight );
-	  }
+	  // if( !realmetz || !ztodilep ){
+	  // 	if( mbb150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "2btag1_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag1_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag1_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "2btag1_met120_mt2", mll, weight );
+	  // 	}
 
-	  if( mbb150 && mt2b200 && zmet.pfmet() > 80 ){
-		fillHist( "mll", "met80", mll, weight );
-		fillHist( "mt2", "met80", zmet.mt2(), weight );
-	  }
-	  if( mbb150 && mt2b200 && zmet.pfmet() > 100 ){
-		fillHist( "mll", "met100", mll, weight );
-		fillHist( "mt2", "met100", zmet.mt2(), weight );
-	  }
-	  if( mbb150 && mt2b200 && zmet.pfmet() > 120 && zmet.mt2() > 90 ){
-		fillHist( "mll", "met120", mll, weight );
-		fillHist( "mt2", "met120", zmet.mt2(), weight );
-	  }
+	  // 	if( mbb100150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "2btag2_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag2_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag2_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "2btag2_met120_mt2", mll, weight );
+	  // 	}
 
-	  if( mbb150 && mt2b200 ){ // 0 btags
-		if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag1", zmet.pfmet(), weight );
-		if( zmet.leptype() == 2 ) fillHist( "met", "2btag1", zmet.pfmet(), weight );
-	  }
-	  if( mbb100150 && mt2b200 ){ // 0 btags
-		if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag2", zmet.pfmet(), weight );
-		if( zmet.leptype() == 2 ) fillHist( "met", "2btag2", zmet.pfmet(), weight );
-	  }
-	  if( mbb100150 && !mt2b200 ){ // 0 btags
-		if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag3", zmet.pfmet(), weight );
-		if( zmet.leptype() == 2 ) fillHist( "met", "2btag3", zmet.pfmet(), weight );
-	  }
-	  if( mbb150 && !mt2b200 ){ // 0 btags
-		if( medzwindow && zmet.leptype() != 2 ) fillHist( "met", "2btag4", zmet.pfmet(), weight );
-		if( zmet.leptype() == 2 ) fillHist( "met", "2btag4", zmet.pfmet(), weight );
-	  }
+	  // 	if( mbb100150 && !mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "2btag3_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag3_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag3_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "2btag3_met120_mt2", mll, weight );
+	  // 	}
 
-	  if( !realmetz || !ztodilep ){
-		if( mbb150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "2btag1_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag1_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag1_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "2btag1_met120_mt2", mll, weight );
-		}
+	  // 	if( mbb150 && !mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  fillHist(                  "mll", "2btag4_met120", mll, weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag4_met120", zmet.mt2(), weight );
+	  // 	  if( medzwindow ) fillHist( "mt2", "2btag4_met120_otfmt2", mT2, weight );
+	  // 	  if( mT2 > 90.0 ) fillHist( "mll", "2btag4_met120_mt2", mll, weight );
+	  // 	}
 
-		if( mbb100150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "2btag2_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag2_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag2_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "2btag2_met120_mt2", mll, weight );
-		}
+	  // 	if( mbb150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
+	  // 	  if( zmet.dilep().mass() >= 20 && zmet.dilep().mass() < 50 ){
+	  // 		if( zmet.isdata() ){
+	  // 		  if( zmet.leptype() == 2 ) cout << "Found event in list! " << zmet.run() << " " << zmet.lumi() << " " << zmet.event() << endl;
+	  // 		}		  
+	  // 	  } 
+	  // 	}
 
-		if( mbb100150 && !mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "2btag3_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag3_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag3_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "2btag3_met120_mt2", mll, weight );
-		}
-
-		if( mbb150 && !mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
-		  fillHist(                  "mll", "2btag4_met120", mll, weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag4_met120", zmet.mt2(), weight );
-		  if( medzwindow ) fillHist( "mt2", "2btag4_met120_otfmt2", mT2, weight );
-		  if( mT2 > 90.0 ) fillHist( "mll", "2btag4_met120_mt2", mll, weight );
-		}
-
-		if( mbb150 && mt2b200 && zmet.pfmet() > 120.0 ){ // 0 btags
-		  if( zmet.dilep().mass() >= 20 && zmet.dilep().mass() < 50 ){
-			if( zmet.isdata() ){
-			  if( zmet.leptype() == 2 ) cout << "Found event in list! " << zmet.run() << " " << zmet.lumi() << " " << zmet.event() << endl;
-			}		  
-		  } 
-		}
-
-	  }
-	  	  	 	
-	  // if( medzwindow ){
-	  // 	fillHist( "mbb", "dilep", mbb, weight );
 	  // }
 
-	  // if( medzwindow && mbb100150 ){
-	  // 	fillHist( "hpt", "dilep", ptbb, weight );
-	  // }
-		
-	  if( !medzwindow ){ continue; }//zveto medium	  
-
-	  //fill met plots	  
-	  // if( mbb100150 ){
-	  // 	fillHist( "met", "dilep", zmet.pfmet(), weight );
-	  // }
-	  
-	  // if( mbb100150 ){
-	  // 	fillHist( "mt2b", "dilep", mT2b, weight );
-	  // }
-	  
-	  if(zmet.leptype() == 2){ continue; }//no more use for OF events after this point
-
-	  // if( (zmet.dilep().pt()<22) )		continue;
-	  
-	  if( mbb100150 ){
-		if( zmet.pfmet() < 60 ){
-		  fillHist( "mt2b", "sig", mT2b, weight );
-		}
-	  }
-	  
+	  if( !medzwindow ){ continue; }//zveto medium	  	  
+	  if(zmet.leptype() == 2){ continue; }//no more use for OF events after this point	  
 	  continue;
 
 	}
@@ -871,25 +747,25 @@ void mainTemplateLooper::bookHist(map<string,TH1F*> &hist_map, const string &his
 void mainTemplateLooper::bookHists(){
   
   vector <string> variable;
-  variable.push_back("mll");
-  variable.push_back("mbb");
-  variable.push_back("ptbb");
-  variable.push_back("mjj");
-  variable.push_back("ptjj");
-  variable.push_back("njets");
-  variable.push_back("met");
-  variable.push_back("zpt");
-  variable.push_back("zht");
-  variable.push_back("hpt");
+  // variable.push_back("mll");
+  // variable.push_back("mbb");
+  // variable.push_back("ptbb");
+  // variable.push_back("mjj");
+  // variable.push_back("ptjj");
+  // variable.push_back("njets");
+  // variable.push_back("met");
+  // variable.push_back("zpt");
+  // variable.push_back("zht");
+  // variable.push_back("hpt");
   variable.push_back("mt2b");
   variable.push_back("mt2j");
   variable.push_back("mt2bgen");
-  variable.push_back("mt2jgen");
-  variable.push_back("nbtags");
-  variable.push_back("csv1");
-  variable.push_back("csv2");
-  variable.push_back("csv3");
-  variable.push_back("mt2");
+  // variable.push_back("mt2jgen");
+  // variable.push_back("nbtags");
+  // variable.push_back("csv1");
+  // variable.push_back("csv2");
+  // variable.push_back("csv3");
+  // variable.push_back("mt2");
 
   vector <string> event_type;
   event_type.push_back("ee");
@@ -925,37 +801,6 @@ void mainTemplateLooper::bookHists(){
   evtselection.push_back("3jet");
   evtselection.push_back("met120_otfmt2");
   evtselection.push_back("met120_mt2");
-  // selection.push_back("bveto2_met120");
-  // selection.push_back("bveto3_met120");
-  // selection.push_back("bveto4_met120");
-  // selection.push_back("2btag1_met120");
-  // selection.push_back("2btag2_met120");
-  // selection.push_back("2btag3_met120");
-  // selection.push_back("2btag4_met120");
-  // selection.push_back("bveto1_met120_otfmt2");
-  // selection.push_back("bveto2_met120_otfmt2");
-  // selection.push_back("bveto3_met120_otfmt2");
-  // selection.push_back("bveto4_met120_otfmt2");
-  // selection.push_back("2btag1_met120_otfmt2");
-  // selection.push_back("2btag2_met120_otfmt2");
-  // selection.push_back("2btag3_met120_otfmt2");
-  // selection.push_back("2btag4_met120_otfmt2");
-  // selection.push_back("2btag1_met120_mt2");
-  // selection.push_back("2btag2_met120_mt2");
-  // selection.push_back("2btag3_met120_mt2");
-  // selection.push_back("2btag4_met120_mt2");
-  // selection.push_back("bveto1_met120_mt2");
-  // selection.push_back("bveto2_met120_mt2");
-  // selection.push_back("bveto3_met120_mt2");
-  // selection.push_back("bveto4_met120_mt2");
-  // selection.push_back("bveto1");
-  // selection.push_back("bveto2");
-  // selection.push_back("bveto3");
-  // selection.push_back("bveto4");
-  // selection.push_back("2btag1");
-  // selection.push_back("2btag2");
-  // selection.push_back("2btag3");
-  // selection.push_back("2btag4");
 
   vector <string> selection;
   for( size_t regi = 0; regi < region.size(); regi++ ){
@@ -1004,11 +849,6 @@ void mainTemplateLooper::bookHists(){
 	  }
 	}
   }
-
-  // bookHist(evthists_, "zzbghist_inc", "zzbghist_inc", 350, 0.0, 350.0);
-  // bookHist(evthists_, "zzbghist_tar", "zzbghist_tar", 350, 0.0, 350.0);
-  // bookHist(evthists_, "wzbghist_inc", "wzbghist_inc", 350, 0.0, 350.0);
-  // bookHist(evthists_, "wzbghist_tar", "wzbghist_tar", 350, 0.0, 350.0);
 
   return;
 }
