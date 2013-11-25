@@ -34,8 +34,8 @@ public:
   ~mainTemplateLooper();
   
   int ScanChain ( TChain * chain, bool fast = true, int nEvents = -1, std::string skimFilePrefix = "test", std::string suffix = "" );
-  bool getbjets( const Float_t workingpoint );
-  bool getbjets( const Float_t workingpoint, const std::vector <Float_t> &csvvals );
+  // bool getbjets( const Float_t workingpoint );
+  // bool getbjets( const Float_t workingpoint, const std::vector <Float_t> &csvvals );
   Float_t getMT2( bool verbose = false );
   Float_t getMT2b( const std::vector <LorentzVector> &leps, const std::vector <LorentzVector> &bjets );
   std::vector <Float_t> getMlb( const std::vector <LorentzVector> &leps, const std::vector <LorentzVector> &bjets );
