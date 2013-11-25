@@ -463,7 +463,7 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
 	  
 
 	  //btag stuff  	  
-	  Bool_t twogoodbs = getbjets( 0.244, csvvals );	  
+	  Bool_t twogoodbs = getbjets( goodbs, jets, 0.244, csvvals );	  
 
 	  if( !twogoodbs ){	continue; }
 
@@ -612,45 +612,6 @@ int mainTemplateLooper::ScanChain ( TChain * chain, bool fast, int nEvents, stri
   
 }
   
-bool mainTemplateLooper::getbjets( const Float_t workingpoint )
-{
-  bool twogoodjets = false;
-  goodbs.clear();
-  if(       zmet.csv1() >= workingpoint && zmet.csv2() >= workingpoint && zmet.csv3() < workingpoint ){
-	goodbs.push_back(zmet.jet1());
-	goodbs.push_back(zmet.jet2());
-	twogoodjets = true;
-  }else if( zmet.csv1() >= workingpoint && zmet.csv3() >= workingpoint && zmet.csv2() < workingpoint ){
-	goodbs.push_back(zmet.jet1());
-	goodbs.push_back(zmet.jet3());
-	twogoodjets = true;
-  }else if( zmet.csv2() >= workingpoint && zmet.csv3() >= workingpoint && zmet.csv1() < workingpoint ){
-	goodbs.push_back(zmet.jet2());
-	goodbs.push_back(zmet.jet3());
-	twogoodjets = true;
-  }
-  return twogoodjets;
-}
-
-bool mainTemplateLooper::getbjets( const Float_t workingpoint, const vector <Float_t> &csvvals )
-{
-  bool twogoodjets = false;
-  goodbs.clear();
-  if(       csvvals.at(0) >= workingpoint && csvvals.at(1) >= workingpoint && csvvals.at(2) < workingpoint ){
-	goodbs.push_back(zmet.jet1());
-	goodbs.push_back(zmet.jet2());
-	twogoodjets = true;
-  }else if( csvvals.at(0) >= workingpoint && csvvals.at(2) >= workingpoint && csvvals.at(1) < workingpoint ){
-	goodbs.push_back(zmet.jet1());
-	goodbs.push_back(zmet.jet3());
-	twogoodjets = true;
-  }else if( csvvals.at(1) >= workingpoint && csvvals.at(2) >= workingpoint && csvvals.at(0) < workingpoint ){
-	goodbs.push_back(zmet.jet2());
-	goodbs.push_back(zmet.jet3());
-	twogoodjets = true;
-  }
-  return twogoodjets;
-}
 
 void mainTemplateLooper::setSample( string samplename )
 {
