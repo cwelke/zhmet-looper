@@ -40,6 +40,11 @@ cwelke_tools  := ../looperTools
 CPPFLAGS  += -I$(cwelke_tools) 
 LDFLAGS   += -L$(cwelke_tools) 
 
+# add looperTools support
+cwelke_tools  := ../zhmet-tools
+CPPFLAGS  += -I$(zhmet_tools) 
+LDFLAGS   += -L$(zhmet_tools) 
+
 # create the dict.cc
 $(rootdict): $(headers)
 	$(call root-cint,$(rootdict),$(headers),$(include_dir),$(link_def),$(defines))
@@ -53,7 +58,7 @@ lib := libmainTemplateLooper.so
 sources := ZMET.cc				                   \
 		   mainTemplateLooper.cc                   \
 		   $(cms2_tools)/goodrun.cc                \
-		   $(cms2_tools)/zhmetjetUtils.cc          \
+		   $(zhmet_tools)/zhmetjetUtils.cc         \
 		   $(cms2_tools_btagreshaping)/BTagReshaping.cc      \
 		   $(cms2_tools_btagreshaping)/btag_payload_light.cc \
 		   $(cms2_tools_btagreshaping)/btag_payload_b.cc     \
